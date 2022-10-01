@@ -7,7 +7,6 @@ using Assets.Scripts.Infrastructure;
 using UniMediator;
 using UnityEngine;
 using Zenject;
-using static UnityEditor.Rendering.FilterWindow;
 
 namespace Assets.Scripts.Circles
 {

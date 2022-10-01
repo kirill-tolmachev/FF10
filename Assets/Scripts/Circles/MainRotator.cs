@@ -1,23 +1,34 @@
 ﻿using Assets.Scripts.Infrastructure;
+using Assets.Scripts.Timing;
+using UniMediator;
 using UnityEngine;
 
 namespace Assets.Scripts.Circles
 {
-    internal class Rotator : MonoBehaviour
+    internal class MainRotator : MonoBehaviour, IMulticastMessageHandler<OnAlarmEnded>
     {
         [SerializeField]
         private float m_rotationSpeed;
 
         [SerializeField]
         private Transform m_target;
-        
+
+        [SerializeField] 
+        private int m_switchDirectionAfter;
+
+        private int m_totalRotations;
+
         private void Update() {
             Vector3 rotation = m_target.rotation.eulerAngles;
             rotation.z += m_rotationSpeed * Time.deltaTime;
 
             m_target.rotation = Quaternion.Euler(rotation);
-            //m_currentAngle += m_rotationSpeed * Time.deltaTime;
-            //m_target.position = Util.OnCircle(m_radius, m_currentAngle, m_target.position.z);
+        }
+
+        public void Handle(OnAlarmEnded message) {
+            m_totalRotations++;
+            if (m_totalRotations % m_switchDirectionAfter == 0)
+                m_rotationSpeed *= -1;
         }
     }
 }
