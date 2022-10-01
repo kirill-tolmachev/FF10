@@ -15,12 +15,6 @@ namespace Assets.Scripts.Circles
 {
     internal class Spawner : MonoBehaviour
     {
-        [SerializeField]
-        private Element m_elementPrefab;
-
-        [Inject] 
-        private ElementDrawer m_drawer;
-
         [Inject] 
         private Config m_config;
 
@@ -43,9 +37,9 @@ namespace Assets.Scripts.Circles
         private Timer m_timer;
 
         public Element SpawnAt(float angle) {
-            var go = m_container.InstantiatePrefab(m_elementPrefab, Vector3.zero, Quaternion.identity, m_elementsContainer);
+            var go = m_container.InstantiatePrefab(m_config.ElementPrefab, Vector3.zero, Quaternion.identity, m_elementsContainer);
             var element = go.GetComponent<Element>();
-            element.SetShape(m_config.OuterCircleRadius - m_elementPrefab.Height / 2f - m_spawnOffset, angle, m_elementAngularSize);
+            element.SetShape(m_config.OuterCircleRadius - m_spawnOffset, angle, m_elementAngularSize);
             Mediator.Publish(new ElementAdded(element));
 
             return element;

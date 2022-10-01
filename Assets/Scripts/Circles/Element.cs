@@ -27,6 +27,7 @@ namespace Assets.Scripts.Circles
 
         public float Height => Mathf.Max(m_lineRenderer.startWidth, m_lineRenderer.endWidth);
 
+        public void SetAngle(float angle) => SetShape(Radius, angle);
         public void SetShape(float radius) => SetShape(radius, Angle);
 
         public void SetShape(float radius, float angle) => SetShape(radius, angle, AngularSize);

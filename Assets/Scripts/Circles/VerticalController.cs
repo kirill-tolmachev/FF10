@@ -7,6 +7,7 @@ using Assets.Scripts.Infrastructure;
 using UniMediator;
 using UnityEngine;
 using Zenject;
+using static UnityEditor.Rendering.FilterWindow;
 
 namespace Assets.Scripts.Circles
 {
@@ -18,23 +19,24 @@ namespace Assets.Scripts.Circles
         [SerializeField]
         private float m_fallSpeed;
 
-        [Inject]
-        private SpawnedElementsController m_spawnedElementsController;
+        [Inject] 
+        private LandedElementsController m_landedElementsController;
 
-        [Inject]
-        private Scaler m_scaler;
-
-        private readonly HashSet<Element> m_elements = new();
+        private readonly List<Element> m_elements = new();
 
         private void LateUpdate() {
-            foreach (var element in m_elements) {
-                float targetRadius = m_config.InnerCircleRadius + element.Height / 2f;
-                element.SetShape(Mathf.Lerp(element.Radius, targetRadius, m_fallSpeed * Time.deltaTime));
 
-                if (Mathf.Approximately(element.Radius, targetRadius)) {
-                    m_scaler.RemoveElement(element);
-                    m_spawnedElementsController.AddElement(element);
-                }     
+            for (int i = m_elements.Count - 1; i >= 0; i--) {
+
+                var element = m_elements[i];
+                float targetRadius = m_landedElementsController.GetTopRadiusAt(element.Angle);//m_config.InnerCircleRadius + element.Height / 2f;
+                element.SetShape(Mathf.Clamp(element.Radius - m_fallSpeed * Time.deltaTime,targetRadius, element.Radius));
+                
+                if (Mathf.Approximately(element.Radius, targetRadius))
+                {
+                    m_elements.RemoveAt(i);
+                    Mediator.Publish(new ElementLanded(element));
+                }
             }
         }
 

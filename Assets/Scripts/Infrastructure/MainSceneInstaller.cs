@@ -17,6 +17,7 @@ namespace Assets.Scripts.Infrastructure
             Container.Bind<Config>().FromComponentInHierarchy().AsSingle();
             Container.Bind<Scaler>().FromComponentInHierarchy().AsSingle();
             Container.Bind<VerticalController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<LandedElementsController>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

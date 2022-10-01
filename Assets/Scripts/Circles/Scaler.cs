@@ -14,10 +14,8 @@ using Timer = Assets.Scripts.Timing.Timer;
 
 namespace Assets.Scripts.Circles
 {
-    internal class Scaler : MonoBehaviour, IMulticastMessageHandler<ElementAdded>, IMulticastMessageHandler<ElementRemoved>
+    internal class Scaler : MonoBehaviour, IMulticastMessageHandler<ElementAdded>, IMulticastMessageHandler<ElementRemoved>, IMulticastMessageHandler<ElementLanded>
     {
-        private HashSet<Element> m_elements = new();
-
         [Inject]
         private Timer m_timer;
 
@@ -29,33 +27,25 @@ namespace Assets.Scripts.Circles
 
         private readonly Dictionary<Element, Sequence> m_sequences = new();
 
-        public void AddElement(Element element) {
-            m_elements.Add(element);
-        }
+        public void AddElement(Element element) => m_sequences[element] = CreateSequence(element);
 
-        public void RemoveElement(Element element) {
-            m_elements.Remove(element);
-        }
+        public void RemoveElement(Element element) => m_sequences.Remove(element);
 
-        public void Handle(ElementAdded message) {
-            var el = message.Element;
+        public void Handle(ElementAdded message) => AddElement(message.Element);
 
-            AddElement(el);
-            m_sequences[el] = CreateSequence(el);
-        }
+        public void Handle(ElementRemoved message) => RemoveElement(message.Element);
 
-        public void Handle(ElementRemoved message) {
-            RemoveElement(message.Element);
-        }
+        public void Handle(ElementLanded message) => RemoveElement(message.Element);
 
-        void Start() {
+        private void Start() {
             m_timer.SubscribeAt(m_config.MusicBpm / 60f, () => Scale());
         }
 
         private void Scale() {
             Debug.Log("Scale!");
-            foreach (var element in m_elements) {
-                ScaleOne(element);
+            foreach (var (_, seq) in m_sequences) {
+                seq.Rewind();
+                seq.Play();
             }
         }
 
@@ -73,12 +63,6 @@ namespace Assets.Scripts.Circles
             sequence.Append(t.DOMove(Vector3.zero, inDuration));
             
             return sequence;
-        }
-
-        private void ScaleOne(Element element) {
-            var s = m_sequences[element];
-            s.Rewind();
-            s.Play();
         }
     }
 }
