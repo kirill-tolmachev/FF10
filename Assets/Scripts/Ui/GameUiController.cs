@@ -31,14 +31,19 @@ namespace Assets.Scripts.Ui
 
         public void Handle(OnAlarmStarted message) {
             m_timeLeftLabel.text = "FF:" + string.Join("", Enumerable.Repeat("F", m_msPrecision));
-            m_timeLeftLabel.DOColor(Color.red, 0f);
+            SetLabelColor(Color.red);
             m_waiting = true;
         }
 
-        public void Handle(OnAlarmEnded message)
-        {
-            m_timeLeftLabel.DOColor(Color.white, 0f);
+        public void Handle(OnAlarmEnded message) {
+            SetLabelColor(Color.white);
             m_waiting = false;
+        }
+
+        private void SetLabelColor(Color color) {
+            m_timeLeftLabel.color = color;
+            var oldColor = m_timeLeftLabel.fontSharedMaterial.GetColor(ShaderUtilities.ID_GlowColor);
+            m_timeLeftLabel.fontSharedMaterial.SetColor(ShaderUtilities.ID_GlowColor, new Color(color.r, color.g, color.b, oldColor.a));
         }
     }
 }

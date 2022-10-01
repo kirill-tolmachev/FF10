@@ -29,8 +29,8 @@ namespace Assets.Scripts.Circles
             for (int i = m_elements.Count - 1; i >= 0; i--) {
 
                 var element = m_elements[i];
-                float targetRadius = m_landedElementsController.GetTopRadiusAt(element.Angle);//m_config.InnerCircleRadius + element.Height / 2f;
-                element.SetShape(Mathf.Clamp(element.Radius - m_fallSpeed * Time.deltaTime,targetRadius, element.Radius));
+                float targetRadius = m_landedElementsController.GetTopRadiusAt(element.Angle);
+                element.SetRadius(Mathf.Clamp(element.Radius - m_fallSpeed * Time.deltaTime, targetRadius, element.Radius));
                 
                 if (Mathf.Approximately(element.Radius, targetRadius))
                 {

@@ -28,7 +28,10 @@ namespace Assets.Scripts.Circles
         public float Height => Mathf.Max(m_lineRenderer.startWidth, m_lineRenderer.endWidth);
 
         public void SetAngle(float angle) => SetShape(Radius, angle);
-        public void SetShape(float radius) => SetShape(radius, Angle);
+        public void SetRadius(float radius) => SetShape(radius, Angle);
+        public void SetAngularSize(float angularSize) => SetShape(Radius, Angle, angularSize);
+
+        public void SetLeftRight(float left, float right) => SetAngle((right - left) / 2f);
 
         public void SetShape(float radius, float angle) => SetShape(radius, angle, AngularSize);
 
@@ -43,5 +46,15 @@ namespace Assets.Scripts.Circles
             AngularSize = angularSize;
         }
 
+        private void LateUpdate() {
+            if (IsRound())
+                SetColor(Color.yellow);
+        }
+
+        public void SetColor(Color color) {
+            m_lineRenderer.material.color = color;
+        }
+
+        private bool IsRound() => this.AngularSize >= 360f;
     }
 }
