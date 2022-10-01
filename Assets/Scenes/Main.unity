@@ -1550,7 +1550,7 @@ MonoBehaviour:
       m_Action: Controls
       m_Flags: 8
     m_Flags: 0
-  m_speed: 10
+  m_speed: 50
 --- !u!114 &1113753576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dfaced66c5c1d3468f1034effbc1c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_horizontalScaleSpeed: 20
+  m_horizontalScaleSpeed: 5
 --- !u!114 &1113753577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1576,7 +1576,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb893c21700fd404d88475e45d0fad8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rotationSpeed: 0
+  m_rotationSpeed: 20
   m_target: {fileID: 1755789067}
   m_switchDirectionAfter: 2
 --- !u!114 &1113753578
@@ -1634,7 +1634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b692a60f65b436a449cc1bc56caf313d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fallSpeed: 10
+  m_fallSpeed: 1
 --- !u!114 &1113753582
 MonoBehaviour:
   m_ObjectHideFlags: 0
