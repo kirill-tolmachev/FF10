@@ -6,9 +6,9 @@ namespace Assets.Scripts.Circles
 {
     internal class ElementDrawer
     {
-        private readonly Config m_config;
+        private readonly IElementPrecisionProvider m_config;
 
-        public ElementDrawer(Config config) {
+        public ElementDrawer(IElementPrecisionProvider config) {
             m_config = config;
         }
 

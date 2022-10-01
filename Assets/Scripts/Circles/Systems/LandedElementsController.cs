@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
 using UniMediator;
 using UnityEngine;
@@ -10,7 +11,7 @@ using Zenject;
 
 namespace Assets.Scripts.Circles
 {
-    internal class LandedElementsController : MonoBehaviour, IMulticastMessageHandler<ElementLanded>
+    internal class LandedElementsController : GameSystem, IMulticastMessageHandler<ElementLanded>
     {
         [Inject]
         private Config m_config;
@@ -28,7 +29,7 @@ namespace Assets.Scripts.Circles
             m_landedElements.Remove(element);
         }
 
-        private void Update() {
+        protected override void OnUpdate() {
             //for (int i = m_spawnedElements.Count - 1; i >= 0; i--) {
             //    for (int j = m_spawnedElements.Count - 1; j >= 0; j--) {
             //        var x = m_spawnedElements[i];

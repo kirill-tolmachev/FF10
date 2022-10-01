@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Systems;
 using UniMediator;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Circles
 {
-    internal class HorizontalController : MonoBehaviour, IMulticastMessageHandler<ElementLanded>, IMulticastMessageHandler<ElementUnlanded>
+    internal class HorizontalController : GameSystem, IMulticastMessageHandler<ElementLanded>, IMulticastMessageHandler<ElementUnlanded>
     {
         [SerializeField]
         private InputAction m_controls;
@@ -24,7 +25,7 @@ namespace Assets.Scripts.Circles
 
         public void Handle(ElementUnlanded message) => m_elements.Remove(message.Element);
 
-        void Update() {
+        protected override void OnUpdate() {
             var movement = m_controls.ReadValue<float>();
             foreach (var element in m_elements) {
                 element.SetAngle(element.Angle + movement * m_speed * Time.deltaTime);

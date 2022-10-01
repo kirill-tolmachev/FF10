@@ -1,11 +1,12 @@
-﻿using Assets.Scripts.Infrastructure;
+﻿using Assets.Scripts.Circles.Systems;
+using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Timing;
 using UniMediator;
 using UnityEngine;
 
 namespace Assets.Scripts.Circles
 {
-    internal class MainRotator : MonoBehaviour, IMulticastMessageHandler<OnAlarmEnded>
+    internal class MainRotator : GameSystem, IMulticastMessageHandler<OnAlarmEnded>
     {
         [SerializeField]
         private float m_rotationSpeed;
@@ -18,7 +19,7 @@ namespace Assets.Scripts.Circles
 
         private int m_totalRotations;
 
-        private void Update() {
+        protected override void OnUpdate() {
             Vector3 rotation = m_target.rotation.eulerAngles;
             rotation.z += m_rotationSpeed * Time.deltaTime;
 

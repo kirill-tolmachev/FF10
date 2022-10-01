@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles;
+using Assets.Scripts.Circles.Systems;
 using UniMediator;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -23,7 +25,7 @@ namespace Assets.Scripts.Timing
         }
     }
 
-    internal class Timer : MonoBehaviour
+    internal class Timer : GameSystem
     {
         [SerializeField]
         private float m_secondsInterval;
@@ -44,7 +46,7 @@ namespace Assets.Scripts.Timing
         private Coroutine m_runCoroutine;
 
         private void Start() {
-            m_last = Time.time;
+            //m_last = Time.time;
             m_wait = new WaitForSeconds(m_alarmInterval);
 
             m_runCoroutine = StartCoroutine(Run());
@@ -56,9 +58,10 @@ namespace Assets.Scripts.Timing
 
             while (true) {
                 yield return null;
-
+                if (!IsRunning)
+                    continue;
+                
                 var now = Now;
-
                 float GetTimeLeft(float interval, float last) => interval - (now - last);
 
                 foreach (var subscription in m_subscriptions) {
@@ -91,5 +94,9 @@ namespace Assets.Scripts.Timing
             m_subscriptions.Remove(subscription);
         }
 
+        public override void Handle(GameStarted message) {
+            m_last = Time.time;
+            base.Handle(message);
+        }
     }
 }

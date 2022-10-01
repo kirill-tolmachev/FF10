@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
 using UnityEngine;
 
 namespace Assets.Scripts.Circles
 {
-    internal class CameraRotator : MonoBehaviour
+    internal class CameraRotator : GameSystem
     {
         [SerializeField] 
         private float m_rotationSpeed;
@@ -29,7 +30,7 @@ namespace Assets.Scripts.Circles
             m_currentAngle = -90f;
         }
 
-        private void Update() {
+        protected override void OnUpdate() {
             m_currentAngle += m_rotationSpeed * Time.deltaTime;
             m_target.position = Util.OnCircle(m_radius, m_currentAngle, m_target.position.z);
         }

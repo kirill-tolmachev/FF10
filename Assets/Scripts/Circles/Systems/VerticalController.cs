@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
 using UniMediator;
 using UnityEngine;
@@ -10,11 +11,8 @@ using Zenject;
 
 namespace Assets.Scripts.Circles
 {
-    internal class VerticalController : MonoBehaviour, IMulticastMessageHandler<ElementAdded>, IMulticastMessageHandler<ElementRemoved>
+    internal class VerticalController : GameSystem, IMulticastMessageHandler<ElementAdded>, IMulticastMessageHandler<ElementRemoved>
     {
-        [Inject] 
-        private Config m_config;
-
         [SerializeField]
         private float m_fallSpeed;
 
@@ -24,6 +22,8 @@ namespace Assets.Scripts.Circles
         private readonly List<Element> m_elements = new();
 
         private void LateUpdate() {
+            if (!IsRunning)
+                return;
 
             for (int i = m_elements.Count - 1; i >= 0; i--) {
 

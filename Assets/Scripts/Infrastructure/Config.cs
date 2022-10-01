@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Circles;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.Infrastructure
 {
-    internal class Config : MonoBehaviour
+    internal class Config : MonoBehaviour, IElementPrecisionProvider
     {
         [SerializeField] 
         private Element m_elementPrefab;

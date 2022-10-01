@@ -14,6 +14,7 @@ namespace Assets.Scripts.Infrastructure
         public override void InstallBindings() {
             Container.Bind<Timer>().FromComponentInHierarchy().AsSingle();
             Container.Bind<ElementDrawer>().ToSelf().AsSingle();
+            Container.Bind<IElementPrecisionProvider>().FromMethod(x => x.Container.Resolve<Config>());
             Container.Bind<Config>().FromComponentInHierarchy().AsSingle();
             Container.Bind<Scaler>().FromComponentInHierarchy().AsSingle();
             Container.Bind<VerticalController>().FromComponentInHierarchy().AsSingle();

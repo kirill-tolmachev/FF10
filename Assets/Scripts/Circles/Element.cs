@@ -18,9 +18,6 @@ namespace Assets.Scripts.Circles
         [Inject]
         private ElementDrawer m_drawer;
 
-        [Inject]
-        private Config m_config;
-
         public float Angle { get; private set; }
         public float Radius { get; private set; }
         public float AngularSize { get; private set; }

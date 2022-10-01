@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Timing;
 using DG.Tweening;
 using TMPro;
@@ -12,7 +13,7 @@ using Zenject;
 
 namespace Assets.Scripts.Ui
 {
-    internal class GameUiController : MonoBehaviour, IMulticastMessageHandler<OnAlarmStarted>, IMulticastMessageHandler<OnAlarmEnded>
+    internal class GameUiController : GameSystem, IMulticastMessageHandler<OnAlarmStarted>, IMulticastMessageHandler<OnAlarmEnded>
     {
         [Inject] private Timer m_timer;
 
@@ -23,6 +24,9 @@ namespace Assets.Scripts.Ui
         private int m_msPrecision = 2;
 
         private void LateUpdate() {
+            if (!IsRunning)
+                return;
+
             if (!m_waiting)
                 m_timeLeftLabel.text = $"{m_timer.TimeLeft.Seconds:00}:{Hex(m_timer.TimeLeft.Milliseconds)}";
         }
