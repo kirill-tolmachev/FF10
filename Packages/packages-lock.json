@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.tharinga.unimediator": {
+      "version": "https://github.com/tharinga/UniMediator.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9db70641194de4a12be76d897324c5255d73fed0"
+    },
     "com.unity.2d.animation": {
       "version": "8.0.3",
       "depth": 1,
