@@ -22,7 +22,7 @@ namespace Assets.Scripts.Circles
             Vector3 rotation = m_target.rotation.eulerAngles;
             rotation.z += m_rotationSpeed * Time.deltaTime;
 
-            m_target.rotation = Quaternion.Euler(rotation);
+            m_target.rotation = Quaternion.Euler(rotation); 
         }
 
         public void Handle(OnAlarmEnded message) {

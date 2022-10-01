@@ -29,7 +29,12 @@ namespace Assets.Scripts.Circles
 
         public void AddElement(Element element) => m_sequences[element] = CreateSequence(element);
 
-        public void RemoveElement(Element element) => m_sequences.Remove(element);
+        public void RemoveElement(Element element) {
+            if (m_sequences.TryGetValue(element, out var sequence)) {
+                sequence.Kill();
+                m_sequences.Remove(element);
+            }
+        }
 
         public void Handle(ElementAdded message) => AddElement(message.Element);
 
