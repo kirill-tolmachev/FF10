@@ -53,8 +53,6 @@ namespace Assets.Scripts.Circles.Systems
         }
 
         private void SpawnWave(int enemies) {
-            return;
-
             if (!m_canSpawn)
                 return;
 
