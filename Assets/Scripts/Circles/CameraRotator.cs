@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
+using UniMediator;
 using UnityEngine;
 
 namespace Assets.Scripts.Circles
@@ -16,15 +18,17 @@ namespace Assets.Scripts.Circles
 
         [SerializeField]
         private Transform m_target;
-        
+
+        private Vector3 m_initialPosition;
+
         private float m_radius;
         private float m_currentAngle;
 
         private void Start() {
-            var position = m_target.position;
+            m_initialPosition = m_target.position;
             
-            float x = position.x;
-            float y = position.y;
+            float x = m_initialPosition.x;
+            float y = m_initialPosition.y;
             
             m_radius = Mathf.Sqrt(x * x + y * y);
             m_currentAngle = -90f;
@@ -34,5 +38,12 @@ namespace Assets.Scripts.Circles
             m_currentAngle += m_rotationSpeed * Time.deltaTime;
             m_target.position = Util.OnCircle(m_radius, m_currentAngle, m_target.position.z);
         }
+
+        public override void Handle(GameStarted message) {
+            base.Handle(message);
+
+            m_target.position = m_initialPosition;
+        }
+        
     }
 }

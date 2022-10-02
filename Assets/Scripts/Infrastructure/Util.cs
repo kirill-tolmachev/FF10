@@ -84,5 +84,6 @@ namespace Assets.Scripts.Infrastructure
         public static float Right(this Element element) => NormalizeAngle(element.Angle + element.AngularSize / 2f);
         public static float Left(this Element element) => NormalizeAngle(element.Angle - element.AngularSize / 2f);
 
+        public static float Max(float x, float y, float z) => Mathf.Max(x, Mathf.Max(y, z));
     }
 }

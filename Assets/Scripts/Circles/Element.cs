@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Infrastructure;
 using UnityEngine;
 using Zenject;
@@ -10,7 +11,7 @@ using Zenject;
 namespace Assets.Scripts.Circles
 {
     [RequireComponent(typeof(LineRenderer))]
-    internal class Element : MonoBehaviour
+    internal class Element : MonoBehaviour, IRemovable
     {
         [SerializeField]
         private LineRenderer m_lineRenderer;
@@ -53,5 +54,11 @@ namespace Assets.Scripts.Circles
         }
 
         private bool IsRound() => this.AngularSize >= 360f;
+
+        private void OnDrawGizmos() {
+            var pos = Util.OnCircle(Radius, Angle);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(pos, 0.01f);
+        }
     }
 }

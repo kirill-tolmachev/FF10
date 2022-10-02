@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Timing;
 using UniMediator;
 using UnityEngine;
@@ -10,7 +11,7 @@ using Zenject;
 
 namespace Assets.Scripts.Circles
 {
-    internal class ElementJoiner : MonoBehaviour, IMulticastMessageHandler<ElementLanded>
+    internal class ElementJoiner : MonoBehaviour, IMulticastMessageHandler<ElementLanded>, IMulticastMessageHandler<GameObjectRemoved>
     {
         [Inject] 
         private Timer m_timer;
@@ -25,5 +26,9 @@ namespace Assets.Scripts.Circles
 
         }
 
+        public void Handle(GameObjectRemoved message) {
+            if (message.Object is Element e)
+                m_landedElements.Remove(e);
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Timing;
 using DG.Tweening;
@@ -14,7 +15,11 @@ using Timer = Assets.Scripts.Timing.Timer;
 
 namespace Assets.Scripts.Circles
 {
-    internal class Scaler : MonoBehaviour, IMulticastMessageHandler<ElementAdded>, IMulticastMessageHandler<ElementRemoved>, IMulticastMessageHandler<ElementLanded>
+    internal class Scaler : MonoBehaviour, 
+        IMulticastMessageHandler<ElementAdded>, 
+        IMulticastMessageHandler<ElementRemoved>, 
+        IMulticastMessageHandler<ElementLanded>,
+        IMulticastMessageHandler<GameObjectRemoved>
     {
         [Inject]
         private Timer m_timer;
@@ -68,6 +73,11 @@ namespace Assets.Scripts.Circles
             sequence.Append(t.DOMove(Vector3.zero, inDuration));
             
             return sequence;
+        }
+
+        public void Handle(GameObjectRemoved message) {
+            if (message.Object is Element e)
+                RemoveElement(e);
         }
     }
 }

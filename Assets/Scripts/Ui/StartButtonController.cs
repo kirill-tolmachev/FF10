@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Circles;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Infrastructure;
 using Cinemachine;
 using TMPro;
@@ -17,7 +18,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Ui
 {
-    internal class StartButtonController : MonoBehaviour
+    internal class StartButtonController : MonoBehaviour, IMulticastMessageHandler<GameOver>
     {
         [SerializeField] 
         private float m_speed = 1f;
@@ -51,6 +52,7 @@ namespace Assets.Scripts.Ui
 
         private bool m_completed;
         private int m_frameCount;
+        private bool m_resetting;
 
         private void Start() {
 
@@ -78,20 +80,20 @@ namespace Assets.Scripts.Ui
             if (m_completed)
                 return;
 
-            if (m_isPressing) {
+            if (m_isPressing && !m_resetting) {
                 m_currentProgress += m_speed * Time.deltaTime;
                 if (m_currentProgress > m_max + 20) {
                     m_completed = true;
                     StartCoroutine(StartGame());
                 }
-                    
             }
             else {
                 m_currentProgress = Mathf.Max(0, m_currentProgress - m_speed * 2f * Time.deltaTime);
+            }
 
-                string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT"};
+            if (!m_resetting) {
+                string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT" };
                 m_text.text = (m_frameCount++ % 1000 < 980) ? "START" : artifacts[Random.Range(0, artifacts.Length)];
-
             }
 
             foreach (var element in m_elements) {
@@ -109,6 +111,22 @@ namespace Assets.Scripts.Ui
             m_outerCircle.enabled = true;
 
             Mediator.Publish(new GameStarted());
+        }
+
+        public void Handle(GameOver message) {
+            StartCoroutine(EndGame());
+        }
+
+        private IEnumerator EndGame() {
+            m_gameCamera.Priority = 0;
+            m_menuCamera.Priority = 50;
+
+            m_outerCircle.enabled = false;
+            m_completed = false;
+            m_text.text = "F0:01";
+            m_resetting = true;
+            yield return new WaitForSeconds(2f);
+            m_resetting = false;
         }
     }
 }

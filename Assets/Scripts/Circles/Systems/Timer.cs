@@ -46,10 +46,7 @@ namespace Assets.Scripts.Timing
         private Coroutine m_runCoroutine;
 
         private void Start() {
-            //m_last = Time.time;
-            m_wait = new WaitForSeconds(m_alarmInterval);
-
-            m_runCoroutine = StartCoroutine(Run());
+         
         }
 
         private float Now => Time.time;
@@ -61,8 +58,7 @@ namespace Assets.Scripts.Timing
                 if (!IsRunning)
                     continue;
                 
-                var now = Now;
-                float GetTimeLeft(float interval, float last) => interval - (now - last);
+                float GetTimeLeft(float interval, float last) => interval - (Now - last);
 
                 foreach (var subscription in m_subscriptions) {
                     var timeLeft = GetTimeLeft(subscription.Interval, subscription.Last);
@@ -95,8 +91,15 @@ namespace Assets.Scripts.Timing
         }
 
         public override void Handle(GameStarted message) {
-            m_last = Time.time;
+            
             base.Handle(message);
+
+            if (m_runCoroutine != null)
+                StopCoroutine(m_runCoroutine);
+
+            m_last = Time.time;
+            m_wait = new WaitForSeconds(m_alarmInterval);
+            m_runCoroutine = StartCoroutine(Run());
         }
     }
 }

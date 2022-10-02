@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Assets.Scripts.Circles.Messages;
 using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
 using UniMediator;
@@ -11,7 +12,10 @@ using Zenject;
 
 namespace Assets.Scripts.Circles
 {
-    internal class LandedElementsController : GameSystem, IMulticastMessageHandler<ElementLanded>
+    internal class LandedElementsController : GameSystem, 
+        IMulticastMessageHandler<ElementLanded>, 
+        IMulticastMessageHandler<GameObjectRemoved>,
+        IMulticastMessageHandler<ElementRemoved>
     {
         [Inject]
         private Config m_config;
@@ -20,6 +24,8 @@ namespace Assets.Scripts.Circles
         private float m_horizontalScaleSpeed;
 
         private readonly List<Element> m_landedElements = new();
+
+        public IReadOnlyList<Element> LandedElements => m_landedElements;
 
         public void AddElement(Element element) {
             m_landedElements.Add(element);
@@ -59,10 +65,8 @@ namespace Assets.Scripts.Circles
             float result = m_config.InnerCircleRadius;
 
             foreach (var element in m_landedElements) {
-                var r = element.Radius + element.Height;
-                if ((element.Contains(angle) ||
-                     element.Contains(angle - element.AngularSize / 2f) ||
-                     element.Contains(angle + element.AngularSize / 2f))
+                var r = element.Radius + element.Height / 2f;
+                if ((element.Contains(angle))
                     && r > result)
                     result = r;
             }
@@ -70,6 +74,13 @@ namespace Assets.Scripts.Circles
             return result;
         }
 
+        public void Handle(GameObjectRemoved message) {
+            if (message.Object is Element e)
+                m_landedElements.Remove(e);
+        }
 
+        public void Handle(ElementRemoved message) {
+            m_landedElements.Remove(message.Element);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Circles.Systems;
+﻿using Assets.Scripts.Circles.Messages;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Timing;
 using UniMediator;
@@ -19,6 +20,12 @@ namespace Assets.Scripts.Circles
 
         private int m_totalRotations;
 
+        private Quaternion m_initialRotation;
+
+        private void Start() {
+            m_initialRotation = m_target.rotation;
+        }
+
         protected override void OnUpdate() {
             Vector3 rotation = m_target.rotation.eulerAngles;
             rotation.z += m_rotationSpeed * Time.deltaTime;
@@ -30,6 +37,13 @@ namespace Assets.Scripts.Circles
             m_totalRotations++;
             if (m_totalRotations % m_switchDirectionAfter == 0)
                 m_rotationSpeed *= -1;
+        }
+
+        public override void Handle(GameStarted message) {
+            base.Handle(message);
+
+            m_target.rotation = m_initialRotation;
+            m_totalRotations = 0;
         }
     }
 }
