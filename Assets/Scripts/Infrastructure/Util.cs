@@ -69,7 +69,7 @@ namespace Assets.Scripts.Infrastructure
             //var coords = p0 * radius / Mathf.Sqrt(p0.x * p0.x + p0.y * p0.y);
             //return Mathf.Atan2(coords.y, coords.x);
 
-            float c = Mathf.Atan2(p1.y + p2.y, p1.x + p2.x);
+            float c = Mathf.Rad2Deg * Mathf.Atan2(p1.y + p2.y, p1.x + p2.x);
             return c;
             //float x_mid = radius * Mathf.Cos(c);
             //float y_mid = radius * Mathf.Sin(c);
