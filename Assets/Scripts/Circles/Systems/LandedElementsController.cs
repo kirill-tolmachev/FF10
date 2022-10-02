@@ -36,23 +36,24 @@ namespace Assets.Scripts.Circles
         }
 
         protected override void OnUpdate() {
-            //for (int i = m_spawnedElements.Count - 1; i >= 0; i--) {
-            //    for (int j = m_spawnedElements.Count - 1; j >= 0; j--) {
-            //        var x = m_spawnedElements[i];
-            //        var y = m_spawnedElements[j];
 
-            //        if (!x || !y || x == y)
-            //            continue;
+            for (int i = m_landedElements.Count - 1; i >= 0; i--) {
+                for (int j = m_landedElements.Count - 1; j >= 0; j--) {
+                    var x = m_landedElements[i];
+                    var y = m_landedElements[j];
 
-            //        if (x.Overlaps(y)) {
+                    if (!x || !y || x == y)
+                        continue;
+
+                    if (x.OverlapsHorizontally(y)) {
+                        Debug.Log("OVERLAP!");
+                        Mediator.Publish(new ElementRemoved(y));
+                        Destroy(y);
                         
-            //            Mediator.Publish(new ElementRemoved(y));
-            //            Destroy(y);
-                        
-            //            x.SetLeftRight(Mathf.Min(x.Left(), y.Left()), Mathf.Max(x.Right(), y.Right()));
-            //        }
-            //    }
-            //}
+                        x.SetLeftRight(Mathf.Min(x.Left(), y.Left()), Mathf.Max(x.Right(), y.Right()));
+                    }
+                }
+            }
 
             foreach (var spawnedElement in m_landedElements) {
                 spawnedElement.SetAngularSize(spawnedElement.AngularSize + m_horizontalScaleSpeed * Time.deltaTime);

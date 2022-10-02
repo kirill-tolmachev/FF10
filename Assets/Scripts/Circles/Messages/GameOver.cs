@@ -9,5 +9,10 @@ namespace Assets.Scripts.Circles.Messages
 {
     internal class GameOver : IMulticastMessage
     {
+        public Enemy Killer { get; }
+
+        public GameOver(Enemy killer) {
+            Killer = killer;
+        }
     }
 }

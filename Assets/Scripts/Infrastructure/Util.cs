@@ -26,10 +26,10 @@ namespace Assets.Scripts.Infrastructure
             return angle < r && angle > -r;
         }
 
-        public static bool Overlaps(this Element element, Element other) {
-            return element.Contains(other.Angle) || 
-                   element.Contains(other.Angle - other.AngularSize / 2f) || 
-                   element.Contains(other.Angle + other.AngularSize / 2f);
+        public static bool OverlapsHorizontally(this Element element, Element other) {
+            return Mathf.Approximately(element.Radius, other.Radius) && (
+                element.Contains(other.Angle - other.AngularSize / 2f) ||
+                element.Contains(other.Angle + other.AngularSize / 2f));
         }
 
         public static float NormalizeAngle(float angle)

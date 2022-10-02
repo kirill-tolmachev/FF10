@@ -36,7 +36,15 @@ namespace Assets.Scripts.Circles
         [Inject] 
         private Timer m_timer;
 
-        public Element SpawnAt(float angle) {
+
+        private int m_spawned = 0;
+
+        private Element SpawnAt(float angle) {
+            if (m_spawned > 2)
+                return null;
+
+            m_spawned++;
+
             var go = m_container.InstantiatePrefab(m_config.ElementPrefab, Vector3.zero, Quaternion.identity, m_elementsContainer);
             var element = go.GetComponent<Element>();
             element.SetShape(m_config.OuterCircleRadius - m_spawnOffset, angle, m_elementAngularSize);
@@ -45,10 +53,11 @@ namespace Assets.Scripts.Circles
             return element;
         }
 
+
         private void Start() {
             m_timer.SubscribeAt(1f, () => SpawnAt(RandomAngle()));
         }
 
-        private float RandomAngle() => Random.Range(0, m_angleCount) * (360f / m_angleCount);
+        private float RandomAngle() => 2 * Random.Range(0, m_angleCount / 2) * (360f / m_angleCount);
     }
 }
