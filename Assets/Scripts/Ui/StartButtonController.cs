@@ -13,6 +13,7 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Ui
 {
@@ -30,6 +31,9 @@ namespace Assets.Scripts.Ui
         [SerializeField]
         private Transform m_elementsContainer;
 
+        [SerializeField] 
+        private SpriteRenderer m_outerCircle;
+
         private bool m_isPressing;
 
         private float m_currentProgress = 0f;
@@ -46,6 +50,7 @@ namespace Assets.Scripts.Ui
         [SerializeField] private TMP_Text m_text;
 
         private bool m_completed;
+        private int m_frameCount;
 
         private void Start() {
 
@@ -83,6 +88,10 @@ namespace Assets.Scripts.Ui
             }
             else {
                 m_currentProgress = Mathf.Max(0, m_currentProgress - m_speed * 2f * Time.deltaTime);
+
+                string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT"};
+                m_text.text = (m_frameCount++ % 1000 < 980) ? "START" : artifacts[Random.Range(0, artifacts.Length)];
+
             }
 
             foreach (var element in m_elements) {
@@ -97,7 +106,7 @@ namespace Assets.Scripts.Ui
             yield return new WaitForSeconds(0.1f);
             m_text.text = "FF:10";
             yield return new WaitForSeconds(1.8f);
-            
+            m_outerCircle.enabled = true;
 
             Mediator.Publish(new GameStarted());
         }

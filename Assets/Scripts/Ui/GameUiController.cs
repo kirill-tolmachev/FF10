@@ -31,7 +31,7 @@ namespace Assets.Scripts.Ui
                 m_timeLeftLabel.text = $"{m_timer.TimeLeft.Seconds:00}:{Hex(m_timer.TimeLeft.Milliseconds)}";
         }
 
-        private string Hex(int ms) => string.Join("", ms.ToString("X").Take(2));
+        private string Hex(int ms) => string.Join("", ms.ToString("X").Take(m_msPrecision));
 
         public void Handle(OnAlarmStarted message) {
             m_timeLeftLabel.text = "FF:" + string.Join("", Enumerable.Repeat("F", m_msPrecision));
