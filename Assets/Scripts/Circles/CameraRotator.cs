@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Circles
 {
-    internal class CameraRotator : GameSystem
+    internal class CameraRotator : GameSystem, IMulticastMessageHandler<CameraReset>
     {
         [SerializeField] 
         private float m_rotationSpeed;
@@ -39,11 +39,9 @@ namespace Assets.Scripts.Circles
             m_target.position = Util.OnCircle(m_radius, m_currentAngle, m_target.position.z);
         }
 
-        public override void Handle(GameStarted message) {
-            base.Handle(message);
-
+        public void Handle(CameraReset message) {
             m_target.position = m_initialPosition;
+            m_currentAngle = -90f;
         }
-        
     }
 }

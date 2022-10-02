@@ -12,10 +12,16 @@ using Zenject;
 
 namespace Assets.Scripts.Circles.Systems
 {
-    internal class EnemyFall : GameSystem, IMulticastMessageHandler<EnemySpawned>, IMulticastMessageHandler<EnemyDestroyed>, IMulticastMessageHandler<GameObjectRemoved>
+    internal class EnemyFall : GameSystem, 
+        IMulticastMessageHandler<EnemySpawned>, 
+        IMulticastMessageHandler<EnemyDestroyed>, 
+        IMulticastMessageHandler<GameObjectRemoved>,
+        IMulticastMessageHandler<RoundEnded>
     {
         [SerializeField] 
         private float m_speed;
+
+        private float m_speedMultiplier = 1f;
 
         [Inject] 
         private LandedElementsController m_landedElementsController;
@@ -38,7 +44,7 @@ namespace Assets.Scripts.Circles.Systems
 
             foreach (var enemy in m_enemies) {
                 float target = m_landedElementsController.GetTopRadiusAt(enemy.Angle);
-                enemy.SetPosition(Mathf.Max(enemy.Radius - Time.deltaTime * m_speed, target), enemy.Angle);
+                enemy.SetPosition(Mathf.Max(enemy.Radius - Time.deltaTime * m_speed * m_speedMultiplier, target), enemy.Angle);
 
                 if (EnemyIntersectsCore(enemy)) {
                     Mediator.Publish(new GameOver(enemy));
@@ -67,6 +73,23 @@ namespace Assets.Scripts.Circles.Systems
         public void Handle(GameObjectRemoved message) {
             if (message.Object is Enemy e)
                 m_enemies.Remove(e);
+        }
+
+        public void Handle(RoundEnded message) {
+            m_speedMultiplier = GetSpeedMultiplier(message.Round + 1);
+        }
+
+        private float GetSpeedMultiplier(int round) {
+            if (round < 3)
+                return 1;
+
+            if (round < 5)
+                return 1.2f;
+
+            if (round < 8)
+                return 1.5f;
+
+            return 2f;
         }
     }
 }

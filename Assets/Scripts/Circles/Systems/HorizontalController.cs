@@ -45,9 +45,15 @@ namespace Assets.Scripts.Circles
             }
         }
 
-        private void OnEnable() => m_controls.Enable();
+        private void OnEnable() {
+            m_controls.Enable();
+            m_shift.Enable();
+        }
 
-        private void OnDisable() => m_controls.Disable();
+        private void OnDisable() {
+            m_controls.Disable();
+            m_shift.Disable();
+        }
 
         public void Handle(GameObjectRemoved message) {
             if (message.Object is Element e)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Circles.Systems
 {
-    internal class EnemySpawner : GameSystem, IMulticastMessageHandler<RoundEnded>, IMulticastMessageHandler<GameOver>
+    internal class EnemySpawner : GameSystem, IMulticastMessageHandler<RoundEnded>, IMulticastMessageHandler<GameOver>, IMulticastMessageHandler<GameWon>
     {
         [SerializeField] 
         private Transform m_enemyContainer;
@@ -28,10 +27,10 @@ namespace Assets.Scripts.Circles.Systems
         [Inject] 
         private DiContainer m_container;
 
-        private int m_difficulty;
+        [SerializeField] 
+        private RoundInfo[] m_rounds;
 
         private TimerSubscription m_currentSubscription;
-
         private bool m_canSpawn;
 
         private Enemy SpawnEnemy(float angle) {
@@ -47,24 +46,20 @@ namespace Assets.Scripts.Circles.Systems
             if (m_currentSubscription != null)
                 m_timer.Unsubscribe(m_currentSubscription);
 
-            m_difficulty++;
-            int enemiesPerWave = m_difficulty;
-            int waves = m_difficulty;
-            float waveInterval = 8f / waves;
-
-            m_currentSubscription = m_timer.SubscribeAt(waveInterval, () => StartCoroutine(SpawnWave(enemiesPerWave)));
+            if (m_rounds.Length > message.Round + 1) {
+                var nextRoundInfo = m_rounds[message.Round + 1];
+                m_currentSubscription = m_timer.SubscribeAt(nextRoundInfo.WaveInterval, () => SpawnWave(nextRoundInfo.EnemiesPerWave));
+            }
         }
 
-        private IEnumerator SpawnWave(int enemiesPerWave) {
-            if (m_canSpawn)
-                yield break;
+        private void SpawnWave(int enemies) {
+            return;
 
-            float intervalBetweenEnemies = 0.2f;
-            var wait = new WaitForSeconds(intervalBetweenEnemies);
+            if (!m_canSpawn)
+                return;
 
-            for (int i = 0; i < enemiesPerWave; i++) {
+            for (int i = 0; i < enemies; i++) {
                 SpawnNextEnemy();
-                yield return wait;
             }
         }
 
@@ -73,14 +68,18 @@ namespace Assets.Scripts.Circles.Systems
             SpawnEnemy((2 * Random.Range(0, angleCount / 2) + 1) * (360f / angleCount));
         }
 
-        public void Handle(GameOver message) {
-            m_canSpawn = false;
-
-            m_difficulty = 0;
-        }
+        public void Handle(GameOver message) => Stop();
 
         public override void Handle(GameStarted message) {
             m_canSpawn = true;
+        }
+
+        public void Handle(GameWon message) => Stop();
+
+        private void Stop() {
+            m_canSpawn = false;
+            if (m_currentSubscription != null)
+                m_timer.Unsubscribe(m_currentSubscription);
         }
     }
 }

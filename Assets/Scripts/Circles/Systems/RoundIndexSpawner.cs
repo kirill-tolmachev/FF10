@@ -25,7 +25,7 @@ namespace Assets.Scripts.Circles.Systems
 
         public void Handle(RoundEnded message) {
             int round = message.Round;
-            float angle = -(round - 1) * (360f / m_config.TotalRounds);
+            float angle = -(round - 1) * (360f / (m_config.TotalRounds ));
             var pos = Util.OnCircle(m_config.InnerCircleRadius, angle);
             var go = m_container.InstantiatePrefab(m_config.RoundIndexPrefab, pos, Quaternion.Euler(new Vector3(0,0,angle - 90f)), m_indexContainer);
             var index = go.GetComponent<RoundIndex>();

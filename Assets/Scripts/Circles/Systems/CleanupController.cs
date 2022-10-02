@@ -13,7 +13,7 @@ namespace Assets.Scripts.Circles.Systems
         IMulticastMessageHandler<EnemySpawned>, 
         IMulticastMessageHandler<ElementAdded>, 
         IMulticastMessageHandler<RoundIndexAdded>,
-        IMulticastMessageHandler<GameOver>
+        IMulticastMessageHandler<ReturnToStartScreen>
     {
         private readonly List<IRemovable> m_cache = new();
 
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Circles.Systems
             m_cache.Add(message.Index);
         }
 
-        public void Handle(GameOver message) {
+        public void Handle(ReturnToStartScreen message) {
             for (int i = m_cache.Count - 1; i >= 0; i--) {
                 var go = m_cache[i];
                 var mb = go as MonoBehaviour;

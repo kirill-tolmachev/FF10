@@ -18,7 +18,7 @@ using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Ui
 {
-    internal class StartButtonController : MonoBehaviour, IMulticastMessageHandler<GameOver>
+    internal class StartButtonController : MonoBehaviour, IMulticastMessageHandler<ReturnToStartScreen>
     {
         [SerializeField] 
         private float m_speed = 1f;
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Ui
         [SerializeField] private CinemachineVirtualCamera m_menuCamera;
         [SerializeField] private CinemachineVirtualCamera m_gameCamera;
         [SerializeField] private TMP_Text m_text;
-
+        
         private bool m_completed;
         private int m_frameCount;
         private bool m_resetting;
@@ -102,6 +102,7 @@ namespace Assets.Scripts.Ui
         }
 
         public IEnumerator StartGame() {
+            Mediator.Publish(new CameraReset());
             m_menuCamera.Priority = 0;
             m_gameCamera.Priority = 50;
 
@@ -113,11 +114,11 @@ namespace Assets.Scripts.Ui
             Mediator.Publish(new GameStarted());
         }
 
-        public void Handle(GameOver message) {
-            StartCoroutine(EndGame());
+        public void Handle(ReturnToStartScreen message) {
+            StartCoroutine(EndGame(message.Lock));
         }
 
-        private IEnumerator EndGame() {
+        private IEnumerator EndGame(bool lockedExternally) {
             m_gameCamera.Priority = 0;
             m_menuCamera.Priority = 50;
 
@@ -126,6 +127,16 @@ namespace Assets.Scripts.Ui
             m_text.text = "F0:01";
             m_resetting = true;
             yield return new WaitForSeconds(2f);
+
+            if (!lockedExternally)
+                m_resetting = false;
+        }
+
+        public void SetText(string text) {
+            m_text.text = text;
+        }
+
+        public void Unlock() {
             m_resetting = false;
         }
     }

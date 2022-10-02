@@ -45,8 +45,8 @@ namespace Assets.Scripts.Circles
         }
 
         private void LateUpdate() {
-            if (IsRound())
-                SetColor(Color.yellow);
+            //if (IsRound())
+            //    SetColor(Color.yellow);
         }
 
         public void SetColor(Color color) {

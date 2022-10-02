@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Circles
 {
-    internal class MainRotator : GameSystem, IMulticastMessageHandler<OnAlarmEnded>
+    internal class MainRotator : GameSystem, IMulticastMessageHandler<OnAlarmEnded>, IMulticastMessageHandler<CameraReset>
     {
         [SerializeField]
         private float m_rotationSpeed;
@@ -42,8 +42,11 @@ namespace Assets.Scripts.Circles
         public override void Handle(GameStarted message) {
             base.Handle(message);
 
-            m_target.rotation = m_initialRotation;
             m_totalRotations = 0;
+        }
+
+        public void Handle(CameraReset message) {
+            m_target.rotation = m_initialRotation;
         }
     }
 }

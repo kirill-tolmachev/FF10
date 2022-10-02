@@ -37,6 +37,8 @@ namespace Assets.Scripts.Circles
 
         protected override void OnUpdate() {
 
+            var elementToNewOwner = new Dictionary<Element, Element>();
+
             for (int i = m_landedElements.Count - 1; i >= 0; i--) {
                 for (int j = m_landedElements.Count - 1; j >= 0; j--) {
                     var x = m_landedElements[i];
@@ -45,14 +47,19 @@ namespace Assets.Scripts.Circles
                     if (!x || !y || x == y)
                         continue;
 
+                    Element GetParent(Element candidate) => elementToNewOwner.TryGetValue(candidate, out var parent) ? parent : candidate;
+
                     if (x.OverlapsHorizontally(y)) {
-                        Debug.Log("OVERLAP!");
-                        Mediator.Publish(new ElementRemoved(y));
-                        Destroy(y);
-                        
-                        x.SetLeftRight(Mathf.Min(x.Left(), y.Left()), Mathf.Max(x.Right(), y.Right()));
+                        if (GetParent(x) != y)
+                            elementToNewOwner[y] = GetParent(x);
                     }
                 }
+            }
+
+            foreach (var (element, owner) in elementToNewOwner) {
+                owner.SetShape(owner.Radius, (Util.NormalizeAngle(element.Angle) + Util.NormalizeAngle(owner.Angle)) / 2, element.AngularSize + owner.AngularSize);
+                Mediator.Publish(new ElementRemoved(element));
+                Destroy(element.gameObject);
             }
 
             foreach (var spawnedElement in m_landedElements) {
