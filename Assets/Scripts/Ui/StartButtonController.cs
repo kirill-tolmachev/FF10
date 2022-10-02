@@ -100,11 +100,13 @@ namespace Assets.Scripts.Ui
                 m_currentProgress = Mathf.Max(0, m_currentProgress - m_speed * 2f * Time.deltaTime);
                 if (m_resetting && Mathf.Approximately(m_currentProgress, 0f)) {
                     m_resetting = false;
-                    m_autoStarting = true;
+
+                    if (!m_locked)
+                        m_autoStarting = true;
                 }
             }
 
-            if (!m_resetting) {
+            if (!m_resetting && !m_locked) {
                 string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT" };
                 string defaultText = m_autoStarting ? "RE:\nSTART" : "START";
                 m_text.text = (m_frameCount++ % 1000 < 980) ? defaultText : artifacts[Random.Range(0, artifacts.Length)];
@@ -135,6 +137,7 @@ namespace Assets.Scripts.Ui
         private IEnumerator EndGame(bool lockedExternally) {
             m_gameCamera.Priority = 0;
             m_menuCamera.Priority = 50;
+            m_locked = lockedExternally;
 
             m_outerCircle.enabled = false;
             m_completed = false;
@@ -144,6 +147,7 @@ namespace Assets.Scripts.Ui
 
             if (!lockedExternally)
                 m_resetting = false;
+
         }
 
         public void SetText(string text) {
@@ -151,7 +155,10 @@ namespace Assets.Scripts.Ui
         }
 
         public void Unlock() {
+            m_locked = false;
             m_resetting = false;
         }
+
+        private bool m_locked;
     }
 }

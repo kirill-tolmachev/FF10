@@ -47,6 +47,7 @@ namespace Assets.Scripts.Circles.Systems
                 enemy.SetPosition(Mathf.Max(enemy.Radius - Time.deltaTime * m_speed * m_speedMultiplier, target), enemy.Angle);
 
                 if (EnemyIntersectsCore(enemy)) {
+                    //Mediator.Publish(new GameWon());
                     Mediator.Publish(new GameOver(enemy));
                     break;
                 }
