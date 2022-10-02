@@ -53,6 +53,7 @@ namespace Assets.Scripts.Ui
         private bool m_completed;
         private int m_frameCount;
         private bool m_resetting;
+        private bool m_autoStarting;
 
         private void Start() {
 
@@ -79,16 +80,29 @@ namespace Assets.Scripts.Ui
         private void Update() {
             if (m_completed)
                 return;
+            
+            if ((m_autoStarting || m_isPressing) && !m_resetting) {
+                
+                var speed = m_speed;
 
-            if (m_isPressing && !m_resetting) {
-                m_currentProgress += m_speed * Time.deltaTime;
+                if (m_autoStarting) {
+                    m_text.text = "RESTART";
+                    speed *= 3;
+                }
+
+                m_currentProgress += speed * Time.deltaTime;
                 if (m_currentProgress > m_max + 20) {
+                    m_autoStarting = false;
                     m_completed = true;
                     StartCoroutine(StartGame());
                 }
             }
             else {
                 m_currentProgress = Mathf.Max(0, m_currentProgress - m_speed * 2f * Time.deltaTime);
+                if (m_resetting && Mathf.Approximately(m_currentProgress, 0f)) {
+                    m_resetting = false;
+                    m_autoStarting = true;
+                }
             }
 
             if (!m_resetting) {

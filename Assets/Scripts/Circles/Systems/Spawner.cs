@@ -51,14 +51,8 @@ namespace Assets.Scripts.Circles
             return element;
         }
 
-
-        private void Start() {
-            
-        }
-
         private float RandomAngle() => 2 * Random.Range(0, m_angleCount / 2) * (360f / m_angleCount);
         
-
         public override void Handle(GameStarted message) {
             base.Handle(message);
             ResubscribeAtInterval(GetInterval(1));
@@ -70,10 +64,10 @@ namespace Assets.Scripts.Circles
 
         private float GetInterval(int round) {
             if (round < 3)
-                return 2f;
+                return 1.2f;
 
             if (round < 7)
-                return 1f;
+                return 0.8f;
 
             return 0.5f;
         }

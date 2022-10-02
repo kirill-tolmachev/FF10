@@ -55,35 +55,19 @@ namespace Assets.Scripts.Infrastructure
                 Right = right;
             }
         }
-
-        public static IList<ElementSize> Merge(IList<Element> intervals) {
-            var result = intervals.OrderBy(x => x.Right() - x.Left()).Select(x => new ElementSize(x.Left(), x.Right())).ToList();
-
-            int index = 0; // Stores index of last element
-
-            // Traverse all input Intervals
-            for (int i = 1; i < result.Count; i++)
-            {
-                // If this is not first Interval and overlaps
-                // with the previous one
-                if (result[index].Right >= result[i].Left)
-                {
-                    // Merge previous and current Intervals
-                    result[index].Right = Mathf.Max(result[index].Right, result[i].Right);
-                }
-                else
-                {
-                    index++;
-                    result[index] = result[i];
-                }
-            }
-
-            return result;
-        }
-
-        public static float Right(this Element element) => NormalizeAngle(element.Angle + element.AngularSize / 2f);
-        public static float Left(this Element element) => NormalizeAngle(element.Angle - element.AngularSize / 2f);
-
+        
         public static float Max(float x, float y, float z) => Mathf.Max(x, Mathf.Max(y, z));
+
+        public static float Midpoint(float radius, float a, float b) {
+            var p1 = OnCircle(radius, a);
+            var p2 = OnCircle(radius, b);
+
+            var p0 = new Vector3(p1.x + p2.x, p1.y + p2.y) / 2f;
+            if (p0 == Vector3.zero)
+                return Midpoint(radius, a, b + 0.001f);
+
+            var coords = p0 * radius / Mathf.Sqrt(p0.x * p0.x + p0.y * p0.y);
+            return Mathf.Atan2(coords.y, coords.x);
+        }
     }
 }

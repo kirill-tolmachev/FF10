@@ -57,7 +57,11 @@ namespace Assets.Scripts.Circles
             }
 
             foreach (var (element, owner) in elementToNewOwner) {
-                owner.SetShape(owner.Radius, (Util.NormalizeAngle(element.Angle) + Util.NormalizeAngle(owner.Angle)) / 2, element.AngularSize + owner.AngularSize);
+                var newAngle = Util.Midpoint(element.Radius, element.Angle, owner.Angle);
+                owner.SetShape(owner.Radius, 
+                    //(Util.NormalizeAngle(element.Angle) + Util.NormalizeAngle(owner.Angle)) / 2, 
+                    newAngle,
+                    element.AngularSize + owner.AngularSize);
                 Mediator.Publish(new ElementRemoved(element));
                 Destroy(element.gameObject);
             }
