@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Circles;
+using Assets.Scripts.Circles.Systems;
 using Assets.Scripts.Timing;
 using Assets.Scripts.Ui;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace Assets.Scripts.Infrastructure
             Container.Bind<VerticalController>().FromComponentInHierarchy().AsSingle();
             Container.Bind<LandedElementsController>().FromComponentInHierarchy().AsSingle();
             Container.Bind<StartButtonController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<GameUiController>().FromComponentInHierarchy().AsSingle();
+            Container.Bind<RestartCounter>().FromComponentInHierarchy().AsSingle();
         }
     }
 }

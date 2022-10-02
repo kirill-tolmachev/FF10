@@ -9,6 +9,7 @@ using Assets.Scripts.Ui;
 using UniMediator;
 using UnityEngine;
 using Zenject;
+using Zenject.SpaceFighter;
 
 namespace Assets.Scripts.Circles.Systems
 {
@@ -16,6 +17,8 @@ namespace Assets.Scripts.Circles.Systems
     {
         [Inject] 
         private StartButtonController m_startButtonController;
+
+        [Inject] private RestartCounter m_restartCounter;
 
         public void Handle(GameWon message) {
             StartCoroutine(OnGameWon());
@@ -47,6 +50,7 @@ namespace Assets.Scripts.Circles.Systems
             }
 
             m_startButtonController.Unlock();
+            m_restartCounter.Count = 2;
         }
     }
 }

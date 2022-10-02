@@ -44,6 +44,18 @@ namespace Assets.Scripts.Ui
             m_waiting = false;
         }
 
+        public void Lock() {
+            m_waiting = true;
+        }
+
+        public void Unlock() {
+            m_waiting = false;
+        }
+
+        public void SetText(string text) {
+            m_timeLeftLabel.text = text.ToUpperInvariant();
+        }
+
         private void SetLabelColor(Color color) {
             m_timeLeftLabel.color = color;
             var oldColor = m_timeLeftLabel.fontSharedMaterial.GetColor(ShaderUtilities.ID_GlowColor);
