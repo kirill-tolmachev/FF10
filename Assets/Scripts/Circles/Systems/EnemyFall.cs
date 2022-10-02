@@ -84,10 +84,10 @@ namespace Assets.Scripts.Circles.Systems
                 return 1;
 
             if (round < 5)
-                return 1.2f;
+                return 1.5f;
 
             if (round < 8)
-                return 1.5f;
+                return 1.7f;
 
             return 2f;
         }

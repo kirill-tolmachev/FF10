@@ -64,7 +64,7 @@ namespace Assets.Scripts.Circles
 
         private float GetInterval(int round) {
             if (round < 3)
-                return 1.2f;
+                return 1.5f;
 
             if (round < 7)
                 return 0.8f;
