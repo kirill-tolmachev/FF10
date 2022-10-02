@@ -12,7 +12,12 @@ using UnityEngine.InputSystem;
 
 namespace Assets.Scripts.Circles
 {
-    internal class HorizontalController : GameSystem, IMulticastMessageHandler<ElementLanded>, IMulticastMessageHandler<ElementUnlanded>, IMulticastMessageHandler<GameObjectRemoved>, IMulticastMessageHandler<ElementRemoved>
+    internal class HorizontalController : GameSystem, 
+        IMulticastMessageHandler<ElementLanded>, 
+        IMulticastMessageHandler<ElementUnlanded>, 
+        IMulticastMessageHandler<GameObjectRemoved>, 
+        IMulticastMessageHandler<ElementRemoved>,
+        IMulticastMessageHandler<RoundEnded>
     {
         [SerializeField]
         private InputAction m_controls;
@@ -23,6 +28,7 @@ namespace Assets.Scripts.Circles
         [SerializeField] 
         private float m_speed;
 
+        private float m_speedMultiplier = 1f;
 
         [SerializeField]
         private float m_acceleration;
@@ -35,7 +41,7 @@ namespace Assets.Scripts.Circles
 
         protected override void OnUpdate() {
             var movement = m_controls.ReadValue<float>();
-            var speed = m_speed;
+            var speed = m_speed * m_speedMultiplier;
             
             if (m_shift.ReadValue<float>() > 0f)
                 speed *= m_acceleration;
@@ -62,6 +68,17 @@ namespace Assets.Scripts.Circles
 
         public void Handle(ElementRemoved message) {
             m_elements.Remove(message.Element);
+        }
+
+        public void Handle(RoundEnded message) {
+            m_speedMultiplier = GetSpeedMultiplier(message.Round + 1);
+        }
+
+        private float GetSpeedMultiplier(int round) {
+            if (round < 5)
+                return 1f;
+
+            return 2f;
         }
     }
 }

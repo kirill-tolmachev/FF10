@@ -51,27 +51,25 @@ namespace Assets.Scripts.Circles
 
         private IEnumerator ShowRandomText() {
             var variants = new[] {
-                RandomOneLiner(), 
-                TryHarder(), 
-                JustDoIt(), 
+                TryHarder(),
+                JustDoIt(),
                 Hexagon(),
                 Highscore()
-            };
+            }.Concat(RandomOneLiner()).ToArray();
+
             return variants[Random.Range(0, variants.Length)];
         }
 
-        private IEnumerator RandomOneLiner() {
+        private IEnumerable<IEnumerator> RandomOneLiner() {
             string[] lines = {
-                "PRACTICE\nMAKES\nPERFECT", 
                 "GOOD\nLUCK",
-                "SYSTEM33",
+                "SYSTEM\n33",
                 "DEFEND",
                 "RRRRR",
                 "HALP",
                 "HAHA\nHAHA",
                 "AGAIN",
                 "SUPER\nFF10",
-                "IS IT\nBEATABLE",
                 "WHY",
                 "DEAD\nBEEF",
                 "WHY\nHEX",
@@ -80,8 +78,13 @@ namespace Assets.Scripts.Circles
                 "10:10"
             };
 
+            foreach (var line in lines) {
+                yield return MakeOneLiner(line);
+            }
+        }
+
+        private IEnumerator MakeOneLiner(string line) {
             m_uiController.Lock();
-            var line = lines[Random.Range(0, lines.Length)];
             m_uiController.SetText(line);
             yield return new WaitForSeconds(4);
             m_uiController.Unlock();
@@ -89,9 +92,9 @@ namespace Assets.Scripts.Circles
 
         private IEnumerator TryHarder() {
             m_uiController.Lock();
-            m_uiController.SetText("HARD MODE: ON");
+            m_uiController.SetText("HARD\nMODE:\nON");
             yield return new WaitForSeconds(4);
-            m_uiController.SetText("JUST KIDDING");
+            m_uiController.SetText("JUST\nKIDDING");
             yield return new WaitForSeconds(2);
             m_uiController.Unlock();
         }
@@ -111,13 +114,13 @@ namespace Assets.Scripts.Circles
             m_uiController.Lock();
             m_uiController.SetText("YES");
             yield return new WaitForSeconds(1);
-            m_uiController.SetText("ITS LIKE");
+            m_uiController.SetText("ITS\nLIKE");
             yield return new WaitForSeconds(1);
             m_uiController.SetText("SUPERR");
             yield return new WaitForSeconds(1);
-            m_uiController.SetText("HEXXX...");
+            m_uiController.SetText("HEXXX");
             yield return new WaitForSeconds(1);
-            m_uiController.SetText("NEVERMIND");
+            m_uiController.SetText("NEVER\nMIND");
             yield return new WaitForSeconds(1);
             m_uiController.Unlock();
         }
