@@ -86,8 +86,7 @@ namespace Assets.Scripts.Ui
                 var speed = m_speed;
 
                 if (m_autoStarting) {
-                    m_text.text = "RESTART";
-                    speed *= 3;
+                    speed *= 1.5f;
                 }
 
                 m_currentProgress += speed * Time.deltaTime;
@@ -107,7 +106,8 @@ namespace Assets.Scripts.Ui
 
             if (!m_resetting) {
                 string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT" };
-                m_text.text = (m_frameCount++ % 1000 < 980) ? "START" : artifacts[Random.Range(0, artifacts.Length)];
+                string defaultText = m_autoStarting ? "RESTART" : "START";
+                m_text.text = (m_frameCount++ % 1000 < 980) ? defaultText : artifacts[Random.Range(0, artifacts.Length)];
             }
 
             foreach (var element in m_elements) {
