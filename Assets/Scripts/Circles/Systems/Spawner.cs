@@ -22,10 +22,7 @@ namespace Assets.Scripts.Circles
 
         [SerializeField]
         private float m_elementAngularSize;
-
-        [SerializeField]
-        private Transform m_elementsContainer;
-
+        
         [SerializeField]
         private float m_spawnOffset;
 
@@ -42,7 +39,7 @@ namespace Assets.Scripts.Circles
 
         private Element SpawnAt(float angle) {
 
-            var go = m_container.InstantiatePrefab(m_config.ElementPrefab, Vector3.zero, Quaternion.identity, m_elementsContainer);
+            var go = m_container.InstantiatePrefab(m_config.ElementPrefab, Vector3.zero, Quaternion.identity, m_config.ElementsContainer);
             var element = go.GetComponent<Element>();
             element.SetShape(m_config.OuterCircleRadius - m_spawnOffset, angle, m_elementAngularSize);
             

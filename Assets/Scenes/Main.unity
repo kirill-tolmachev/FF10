@@ -2861,7 +2861,7 @@ GameObject:
   - component: {fileID: 1800517925}
   m_Layer: 0
   m_Name: Game cam
-  m_TagString: Untagged
+  m_TagString: Game
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3270,7 +3270,7 @@ GameObject:
   - component: {fileID: 2035851718}
   m_Layer: 0
   m_Name: Menu cam
-  m_TagString: Untagged
+  m_TagString: Menu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

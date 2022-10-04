@@ -109,7 +109,8 @@ namespace Assets.Scripts.Ui
             if (!m_resetting && !m_locked) {
                 string[] artifacts = { "ST4RT", "STAЯT", "FF10", "STRRT", "5TART", "5T4RT" };
                 string defaultText = m_autoStarting ? "RE:\nSTART" : "START";
-                m_text.text = (m_frameCount++ % 1000 < 980) ? defaultText : artifacts[Random.Range(0, artifacts.Length)];
+                
+                m_text.text = (Time.frameCount % 1000 < 980) ? defaultText : artifacts[Random.Range(0, artifacts.Length)];
             }
 
             foreach (var element in m_elements) {

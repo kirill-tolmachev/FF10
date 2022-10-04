@@ -14,6 +14,9 @@ namespace Assets.Scripts.Infrastructure
         private Element m_elementPrefab;
 
         [SerializeField]
+        private Element m_innerCircleElementPrefab;
+
+        [SerializeField]
         private Enemy m_enemyPrefab;
 
         [SerializeField]
@@ -37,6 +40,15 @@ namespace Assets.Scripts.Infrastructure
         [SerializeField] 
         private int m_totalRounds;
 
+        [SerializeField] 
+        private float m_buttonSpeed = 1f;
+
+        [SerializeField] 
+        private Transform m_elementsContainer;
+
+        [SerializeField] 
+        private int m_innerCircleElementCount = 2;
+
         public int MusicBpm => m_musicBpm;
 
         public float Tick => MusicBpm / 60f;
@@ -47,11 +59,16 @@ namespace Assets.Scripts.Infrastructure
 
         public int ElementPrecision => m_elementPrecision;
         public Element ElementPrefab => m_elementPrefab;
+        public Element InnerCircleElementPrefab => m_innerCircleElementPrefab;
         public Enemy EnemyPrefab => m_enemyPrefab;
         public RoundIndex RoundIndexPrefab => m_roundIndexPrefab;
 
         public float MinBlockSize => m_minBlockSize;
 
         public int TotalRounds => m_totalRounds;
+
+        public Transform ElementsContainer => m_elementsContainer;
+
+        public int InnerCircleElementCount => m_innerCircleElementCount;
     }
 }
